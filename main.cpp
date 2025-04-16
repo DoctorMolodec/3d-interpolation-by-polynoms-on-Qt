@@ -7,13 +7,13 @@
 #include <iostream>
 
 
-// изначально из консоли вводитс€ запрос в виде 1 100 100 4 -1 1 -10 10 где 
-// 1 метод, 100 и 100 количество точек интерпол€ции по х и у соответственно
-// 4 функци€ интерполируема€ из списка -1 1 отрезок по х, -10 10 отрезок по у
+//initially, a request is entered from the console in the form 1 100 100 4 -1 1 -10 10 where
+//1 is the method, 100 and 100 are the number of interpolation points in x and y respectively
+//4 is the interpolated function from the list, -1 1 is the interval for x, -10 10 is the interval for y
 int main(int argc, char** argv)
 { 
-    // ниже производ€тс€ проверки на корректность данных
-    // как по типу, так и по значению
+    //below, checks are performed for data correctness
+    //both by type and by value
     double x_a, x_b, y_a, y_b;
     int method, n_x, n_y, k;
 

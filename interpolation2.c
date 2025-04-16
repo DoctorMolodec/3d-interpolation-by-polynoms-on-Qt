@@ -5,7 +5,7 @@
 #include "method2_2.h"
 #include "method2_1.h"
 
-//интерпол€ци€ в трехмерном постранстве
+//interpolation in three-dimensional space
 static double f0(double x, double y)
 {
     return x * 0 + y * 0 + 1;
@@ -41,7 +41,7 @@ static double f7(double x, double y)
 
 interpolation2_ctx interpolation2_create(int method, int n_x, int n_y, int k, double x_a, double x_b, double y_a, double y_b)
 {
-    //проверка на вмен€емость полученных данных
+    //verification of the obtained data validity
     interpolation2_ctx res_ptr;
     if (n_x < 3 || n_y < 3 || x_a >= x_b || y_a >= y_b || method < 1 || method > 2)
     {
@@ -113,7 +113,7 @@ interpolation2_ctx interpolation2_create(int method, int n_x, int n_y, int k, do
         free(res_ptr);
         return NULL;
     }
-    //матрица јх и ју необходима€ дл€ вычисленний 
+    //matrix Ax and Ay necessary for calculations
     res_ptr->Ax[0] = 1;
     res_ptr->Ax[1] = 0;
     res_ptr->Ax[2] = 0;
@@ -162,7 +162,7 @@ interpolation2_ctx interpolation2_create(int method, int n_x, int n_y, int k, do
 }
 
 
-//здесь вычисл€ем к какому многочлену относитс€ точка и вычисл€ем ее значение
+//here we determine which polynomial the point belongs to and calculate its value
 double interpolation2_calculate(interpolation2_ctx ctx, double x, double y)
 {
     int i, j;

@@ -1,10 +1,10 @@
-#include <QtGui> // подключаем модуль QtGui
+#include <QtGui> //importing the QtGui module
 #include "scene3D.h"
-#include <math.h> // подключаем математическую библиотеку
+#include <math.h> //importing the math library
 
 #define N 1000
 
-const static float pi = 3.141593, k = pi / 180; // глобальная переменная
+const static float pi = 3.141593, k = pi / 180; //global variable
 
 
 
@@ -127,80 +127,79 @@ void Scene3D::draw_f()
     updateGL();
 }
 
-void Scene3D::initializeGL() // инициализация
+void Scene3D::initializeGL() // initialization
 {
-    // просто фон окна
-    qglClearColor(Qt::white); // цвет для очистки буфера изображения - здесь
-    glEnable(GL_DEPTH_TEST); // устанавливает режим проверки глубины пикселей
-    glShadeModel(GL_FLAT); // отключает режим сглаживания цветов
-    glEnable(GL_CULL_FACE); // устанавливается режим, когда строятся только
-    // внешние поверхности
+    // just the window background
+    qglClearColor(Qt::white); // color for clearing the image buffer - here
+    glEnable(GL_DEPTH_TEST); // sets the pixel depth checking mode
+    glShadeModel(GL_FLAT); // disables color smoothing mode
+    glEnable(GL_CULL_FACE); // sets the mode where only
+    // external surfaces are drawn
 }
 
-/*virtual*/ void Scene3D::resizeGL(int nWidth, int nHeight) // окно виджета
+/*virtual*/ void Scene3D::resizeGL(int nWidth, int nHeight) // widget window
 {
-    glMatrixMode(GL_PROJECTION); // устанавливает текущей проекционную матрицу
-    glLoadIdentity(); // присваивает проекционной матрице единичную матрицу
+    glMatrixMode(GL_PROJECTION); // sets the current projection matrix
+    glLoadIdentity(); // assigns the identity matrix to the projection matrix
     GLfloat ratio =
         (GLfloat)nHeight /
-        (GLfloat)nWidth; // отношение высоты окна виджета к его ширине
+        (GLfloat)nWidth; // ratio of widget window height to its width
 
-    // мировое окно
+    // world window
     if (nWidth >= nHeight)
-        glOrtho(-1.0 / ratio, 1.0 / ratio, -1.0, 1.0, -10.0, 1.0); // параметры видимости ортогональной проекции
+        glOrtho(-1.0 / ratio, 1.0 / ratio, -1.0, 1.0, -10.0, 1.0); // visibility parameters for orthogonal projection
     else
-        glOrtho(-1.0, 1.0, -1.0 * ratio, 1.0 * ratio, -10.0, 1.0); // параметры видимости ортогональной проекции
-    // плоскости отсечения (левая, правая, верхняя, нижняя, передняя, задняя)
+        glOrtho(-1.0, 1.0, -1.0 * ratio, 1.0 * ratio, -10.0, 1.0); // visibility parameters for orthogonal projection
+    // clipping planes (left, right, top, bottom, near, far)
 
-    // поле просмотра
+    // viewport
     glViewport(0, 0, (GLint)nWidth, (GLint)nHeight);
 }
 
-/*virtual*/ void Scene3D::paintGL() // рисование
+/*virtual*/ void Scene3D::paintGL() // drawing
 {
-    // glClear(GL_COLOR_BUFFER_BIT); // окно виджета очищается текущим цветом
-    // очистки
+    // glClear(GL_COLOR_BUFFER_BIT); // widget window is cleared with the current color
+    // of clearing
     glClear(GL_COLOR_BUFFER_BIT |
-        GL_DEPTH_BUFFER_BIT); // очистка буфера изображения и глубины
+        GL_DEPTH_BUFFER_BIT); // clearing the image and depth buffers
 
-    glMatrixMode(GL_MODELVIEW); // устанавливает положение и ориентацию матрице
-    // моделирования
-    glLoadIdentity(); // загружает единичную матрицу моделирования
+    glMatrixMode(GL_MODELVIEW); // sets the position and orientation of the model matrix
+    glLoadIdentity(); // loads the identity model matrix
 
-    // последовательные преобразования
-    glScalef(nSca, nSca, nSca); // масштабирование
-    glTranslatef(0.0f, zTra, 0.0f); // трансляция
-    glRotatef(xRot, 1.0f, 0.0f, 0.0f); // поворот вокруг оси X
-    glRotatef(yRot, 0.0f, 1.0f, 0.0f); // поворот вокруг оси Y
-    glRotatef(zRot, 0.0f, 0.0f, 1.0f); // поворот вокруг оси Z
+    // sequential transformations
+    glScalef(nSca, nSca, nSca); // scaling
+    glTranslatef(0.0f, zTra, 0.0f); // translation
+    glRotatef(xRot, 1.0f, 0.0f, 0.0f); // rotation around X axis
+    glRotatef(yRot, 0.0f, 1.0f, 0.0f); // rotation around Y axis
+    glRotatef(zRot, 0.0f, 0.0f, 1.0f); // rotation around Z axis
 
-    //drawAxis(); // рисование осей координат
-    drawFigure(); // нарисовать фигуру
+    //drawAxis(); // drawing coordinate axes
+    drawFigure(); // draw figure
 
 
 }
 
-void Scene3D::drawAxis() // построить оси координат
+void Scene3D::drawAxis() // build coordinate axes
 {
-    glLineWidth(2.0f); // устанавливаю ширину линии приближённо в пикселях
-    // до вызова команды ширина равна 1 пикселю по умолчанию
+    glLineWidth(2.0f); // set line width approximately in pixels 
+    // before calling this command width is equal to 1 pixel by default
 
     glColor4f(1.00f, 0.00f, 0.00f,
-        1.0f); // устанавливается цвет последующих примитивов
-    // ось x
-    glBegin(GL_LINES); // построение линии
-    glVertex3f(x_a, 0.0f, 0.0f); // первая точка
-    glVertex3f(x_b, 0.0f, 0.0f); // вторая точка
-    // ось y
+        1.0f); // sets color for subsequent primitives 
+    // x axis
+    glBegin(GL_LINES); // line construction
+    glVertex3f(x_a, 0.0f, 0.0f); // first point
+    glVertex3f(x_b, 0.0f, 0.0f); // second point
+    // y axis
     glVertex3f(0.0f, y_a, 0.0f);
     glVertex3f(0.0f, y_b, 0.0f);
-    // ось z
+    // z axis
     glVertex3f(0.0f, 0.0f, 10.0f);
     glVertex3f(0.0f, 0.0f, -10.0f);
     glEnd();
 }
 
-void Scene3D::drawFigure() // построить фигуру
+void Scene3D::drawFigure() // build the figure
 {
     double x1 = x_a1, y1 = y_a1, z1;
     double s_x = (x_b1 - x_a1) / N;
@@ -224,13 +223,11 @@ void Scene3D::drawFigure() // построить фигуру
                 inf = z1;
             }
             y1 = y1 + s_y;
-            //if(y1-y_b1>1e-15)
-                //break;
+            
         }
         x1 = x1 + s_x;
         y1 = y_a1;
-        //if(x1-x_b1>1e-15)
-            //break;
+       
 
     }
     abs_max = fmax(fabs(sup), fabs(inf));
@@ -257,50 +254,50 @@ void Scene3D::drawFigure() // построить фигуру
 
 
 
-    glLineWidth(2.0f); // устанавливаю ширину линии приближённо в пикселях
-    // до вызова команды ширина равна 1 пикселю по умолчанию
+    glLineWidth(2.0f); // set line width approximately in pixels.
+    // before calling the command the width is equal to one pixel by default.
 
-    glColor4f(1.00f, 0.00f, 0.00f, 1.0f); // устанавливается цвет последующих примитивов
-    // ось x
-    glBegin(GL_LINES); // построение линии
+    glColor4f(1.00f, 0.00f, 0.00f, 1.0f); // sets the color of subsequent primitives.
+    // axis X.
+    glBegin(GL_LINES); 
     if (x_a1 * x_b1 > 0)
     {
         if (x_a1 > 0)
         {
-            glVertex3f(0, 0.0f, 0.0f); // первая точка
-            glVertex3f(2 * x_b1, 0.0f, 0.0f); // вторая точка
+            glVertex3f(0, 0.0f, 0.0f); //  first point.
+            glVertex3f(2 * x_b1, 0.0f, 0.0f); // second point.
         }
         else
         {
-            glVertex3f(2 * x_a1, 0.0f, 0.0f); // первая точка
-            glVertex3f(0, 0.0f, 0.0f); // вторая точка
+            glVertex3f(2 * x_a1, 0.0f, 0.0f); // first point.
+            glVertex3f(0, 0.0f, 0.0f); // second point.
         }
     }
     else
     {
-        glVertex3f(2 * x_a1, 0.0f, 0.0f); // первая точка
-        glVertex3f(2 * x_b1, 0.0f, 0.0f); // вторая точка
+        glVertex3f(2 * x_a1, 0.0f, 0.0f); // first point.
+        glVertex3f(2 * x_b1, 0.0f, 0.0f); // second point.
     }
-    // ось y
+    // axis Y.
     if (y_a1 * y_b1 > 0)
     {
         if (y_a1 > 0)
         {
-            glVertex3f(0, 0.0f, 0.0f); // первая точка
-            glVertex3f(0, 2 * y_b1, 0.0f); // вторая точка
+            glVertex3f(0, 0.0f, 0.0f); // first point.
+            glVertex3f(0, 2 * y_b1, 0.0f); // second point.
         }
         else
         {
-            glVertex3f(0, 2 * y_a1, 0.0f); // первая точка
-            glVertex3f(0, 0.0f, 0.0f); // вторая точка
+            glVertex3f(0, 2 * y_a1, 0.0f); // first point.
+            glVertex3f(0, 0.0f, 0.0f); // second point.
         }
     }
     else
     {
-        glVertex3f(0, 2 * y_a1, 0.0f); // первая точка
-        glVertex3f(0, 2 * y_b1, 0.0f); // вторая точка
+        glVertex3f(0, 2 * y_a1, 0.0f); // first point.
+        glVertex3f(0, 2 * y_b1, 0.0f); // second point.
     }
-    // ось z
+    //axis Z.
     glVertex3f(0.0f, 0.0f, abs_max);
     glVertex3f(0.0f, 0.0f, -abs_max);
     glEnd();
@@ -430,48 +427,48 @@ void Scene3D::rotate_z(int factor) {
 }
 
 
-void Scene3D::rotate_up() // повернуть сцену вверх
+void Scene3D::rotate_up() 
 {
     xRot += 15.0;
 }
 
-void Scene3D::rotate_down() // повернуть сцену вниз
+void Scene3D::rotate_down()
 {
     xRot -= 15.0;
 }
 
-void Scene3D::rotate_left() // повернуть сцену влево
+void Scene3D::rotate_left() 
 {
     zRot += 1.0;
 }
 
-void Scene3D::rotate_right() // повернуть сцену вправо
+void Scene3D::rotate_right() 
 {
     zRot -= 1.0;
 }
 
-void Scene3D::keyPressEvent(QKeyEvent* pe) // нажатие определенной клавиши
+void Scene3D::keyPressEvent(QKeyEvent* pe) // key press event
 {
     switch (pe->key())
     {
     case Qt::Key_Up:
-        rotate_up(); // повернуть сцену вверх
+        rotate_up(); // rotate the scene up
         break;
 
     case Qt::Key_Down:
-        rotate_down(); // повернуть сцену вниз
+        rotate_down(); // rotate the scene down
         break;
 
     case Qt::Key_Left:
-        rotate_left(); // повернуть сцену влево
+        rotate_left(); // rotate the scene left
         break;
 
     case Qt::Key_Right:
-        rotate_right(); // повернуть сцену вправо
+        rotate_right(); // rotate the scene right
         break;
 
-    case Qt::Key_Escape: // клавиша "эскейп"
-        this->close(); // завершает приложение
+    case Qt::Key_Escape: // escape key
+        this->close(); // close the application
         break;
 
     case Qt::Key_0:
@@ -507,8 +504,7 @@ void Scene3D::keyPressEvent(QKeyEvent* pe) // нажатие определен�
         break;
     }
 
-
-    updateGL(); // обновление изображения
+    updateGL();
 }
 
 void Scene3D::change_graph()
